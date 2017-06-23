@@ -1,0 +1,11 @@
+{
+  "verbose": true,
+  "ignore": [
+  	"server/log/**",
+  	"client/**",
+  	"node_modules/**",
+  	"arduino/**"
+  ],
+  "execMap": {
+  }
+}

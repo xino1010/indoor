@@ -1,0 +1,20 @@
+.background-purple {
+	background-color: #605ca8;
+}
+
+.color-white {
+	color: white;
+}
+
+.cursor-pointer {
+	cursor: pointer;
+}
+
+.number-kpi {
+	font-size: 14px !important;
+}
+
+.separate-kpis {
+	margin-top: 50px;
+	margin-bottom: 50px;
+}

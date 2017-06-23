@@ -1,0 +1,40 @@
+{
+  "name": "interior",
+  "version": "1.0.0",
+  "description": "Control and watch how weed is growing! :)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --config nodemon.json server/server.js"
+  },
+  "author": "Daniel Andújar Lorenzo",
+  "license": "ISC",
+  "dependencies": {
+    "angular": "^1.6.4",
+    "angular-resource": "^1.6.4",
+    "angular-route": "^1.6.4",
+    "bcrypt": "^1.0.2",
+    "body-parser": "^1.17.1",
+    "bootstrap": "^3.3.7",
+    "chart.js": "^2.6.0",
+    "crashreporter": "^1.1.0",
+    "cron": "^1.2.1",
+    "express": "^4.15.2",
+    "express-brute": "^1.0.1",
+    "express-brute-memcached": "0.0.1",
+    "express-brute-mongoose": "0.0.9",
+    "font-awesome": "^4.7.0",
+    "icheck": "^1.0.2",
+    "ionicons": "^3.0.0",
+    "jquery": "^3.2.1",
+    "jsonwebtoken": "^7.4.1",
+    "log": "^1.4.0",
+    "mongoose": "^4.9.9",
+    "morgan": "^1.8.2",
+    "nodemailer": "^4.0.1",
+    "nodemon": "^1.11.0",
+    "rotating-file-stream": "^1.2.2",
+    "serialport": "^4.0.7",
+    "socket.io": "^2.0.1"
+  }
+}

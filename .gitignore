@@ -1,0 +1,8 @@
+server/log
+npm-debug.log
+node_modules/**
+conexion.txt
+sftp-config.json
+server/process.env
+info.txt
+crash**

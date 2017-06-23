@@ -1,0 +1,280 @@
+<div class="wrapper">
+
+  <header class="main-header">
+
+    <nav class="navbar navbar-static-top">
+      <div class="navbar-custom-menu">
+        <ul class="nav navbar-nav">
+          <li class="dropdown user user-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <img src="/assets/img/user.jpg" class="user-image" alt="User Image">
+              <span class="hidden-xs">{{ user.name }} {{ user.surname }}</span>
+            </a>
+          </li>
+          <li>
+            <a ng-click="logout()" class="cursor-pointer"><i class="fa fa-sign-out"></i></a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </header>
+
+  <aside class="main-sidebar">
+    <section class="sidebar">
+      <div class="user-panel" ng-repeat="user in users">
+        <div class="pull-left image">
+          <img src="/assets/img/user.jpg" class="img-circle" alt="User Image">
+        </div>
+        <div class="pull-left info">
+          <p>{{ user.name }} {{ user.surname }}</p>
+          <a ng-show="user.socketid != null" href="#"><i  class="fa fa-circle text-success"></i> En línea</a>
+          <a ng-show="user.socketid == null" href="#"><i  class="fa fa-circle text-muted"></i> Desconectado</a>
+        </div>
+      </div>
+    </section>
+  </aside>
+
+  <div class="content-wrapper">
+    <section class="content">
+
+      <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12" ng-repeat="(key, value) in electricity">
+          <div class="info-box">
+            <span class="info-box-icon bg-yellow"><i class="fa fa-bolt"></i></span>
+            <div class="info-box-content">
+              <div class="form-group">
+                <span class="info-box-text">{{ value.name }}</span>
+                <span class="info-box-number">{{ value.value | number:2 }}{{ value.unity }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-red"><i class="fa fa-thermometer-quarter"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">Temp actual</span>
+              <span class="info-box-number">{{ sensors.dht22.temperature.current | number:2 }}ºC</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-red"><i class="fa fa-thermometer-half"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">Temp media 1h</span>
+              <span class="info-box-number number-kpi">{{ sensors.dht22.temperature.lastHour.average | number:2 }}ºC</span>
+              <span class="info-box-text">Datos</span>
+              <span class="info-box-number number-kpi">{{ sensors.dht22.temperature.lastHour.registers }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="clearfix visible-sm-block"></div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-red"><i class="fa fa-thermometer-three-quarters"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">Temp media 24h</span>
+              <span class="info-box-number number-kpi">{{ sensors.dht22.temperature.lastDay.average | number:2 }}ºC</span>
+              <span class="info-box-text">Datos</span>
+              <span class="info-box-number number-kpi">{{ sensors.dht22.temperature.lastDay.registers }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-red"><i class="fa fa-thermometer-full"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">Temp media esta semana</span>
+              <span class="info-box-number">{{ sensors.dht22.temperature.lastWeek.average | number:2 }}ºC</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-aqua"><i class="fa fa-cloud"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">Humedad actual</span>
+              <span class="info-box-number">{{ sensors.dht22.humidity.current }}%</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-aqua"><i class="fa fa-cloud"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">Humedad media 1h</span>
+              <span class="info-box-number number-kpi">{{ sensors.dht22.humidity.lastHour.average | number:2 }}%</span>
+              <span class="info-box-text">Datos</span>
+              <span class="info-box-number number-kpi">{{ sensors.dht22.humidity.lastHour.registers }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="clearfix visible-sm-block"></div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-aqua"><i class="fa fa-cloud"></i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">Humedad media 24h</span>
+              <span class="info-box-number number-kpi">{{ sensors.dht22.humidity.lastDay.average | number:2 }}%</span>
+              <span class="info-box-text">Datos</span>
+              <span class="info-box-number number-kpi">{{ sensors.dht22.humidity.lastDay.registers }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-aqua"><i class="fa fa-cloud"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">Humedad media semana</span>
+              <span class="info-box-number">{{ sensors.dht22.humidity.lastWeek.average | number:2 }}%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div ng-repeat="(higrometerKey, higrometerValue) in currentHigrometers" class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-green"><i class="fa fa-leaf"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">{{ higrometerValue.name }}</span>
+              <span class="info-box-number">{{ higrometerValue.value }}%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12" ng-repeat="(key, value) in currentSystemInfo">
+          <div class="info-box">
+            <span class="info-box-icon background-purple"><i class="fa {{ value.icon }} color-white"></i></span>
+            <div class="info-box-content">
+              <div class="form-group">
+                <span class="info-box-text">{{ value.name }}</span>
+                <span class="info-box-number">{{ value.value | number:2 }}{{ value.unity }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row separate-kpis">
+        <div class="col-md-2 col-md-offset-5">
+          <button type="button" class="btn btn-block btn-primary" ng-disabled="changingTimes" ng-click="changeTimes()">
+            <span class="fa fa-clock-o"></span>  Cambiar tiempos
+          </button>
+        </div>
+        <div class="col-md-12"></div>
+        <div class="col-md-3 col-sm-6 col-xs-12" style="margin-top: 30px;" ng-repeat="(key, value) in times">
+          <div class="info-box">
+            <span class="info-box-icon bg-maroon"><i class="fa fa-clock-o"></i></span>
+            <div class="info-box-content">
+              <div class="form-group">
+                <span class="info-box-text"><strong>{{ value.name }}</strong></span>
+                <input type="number" min="1" max="120" class="form-control col-sm-6" placeholder="Enter ..." value="1" ng-model="value.time">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row separate-kpis">
+        <div class="col-md-2 col-md-offset-5" style="margin-bottom: 10px;">
+          <button type="button" class="btn btn-block btn-primary" ng-disabled="watering" ng-click="water()">
+            <span class="fa fa-tint"></span>  Regar
+          </button>
+        </div>
+        <div class="col-md-12"></div>
+        <div ng-repeat="(key, value) in signals" class="col-md-3 col-sm-6 col-xs-12" style="margin-top: 30px;">
+          <div class="info-box">
+            <span class="info-box-icon" ng-class="value.status ? 'bg-purple' : 'bg-navy'"><i class="fa fa-signal" style="color: white;"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">{{ value.name }}</span>
+              <span class="info-box-number">{{ value.status ? "Activo" : "Desactivado" }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <canvas id="canvasElectricity"></canvas>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <canvas id="canvasDht22"></canvas>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <canvas id="canvasSysteminfo"></canvas>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <canvas id="canvasHigrometers"></canvas>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 box">
+          <div class="box-header">
+            <h3 class="box-title">Últimos Riegos</h3>
+          </div>
+          <div class="box-body no-padding">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th style="width: 10px">#</th>
+                  <th>Fecha Inicio</th>
+                  <th>Fecha Fin</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="wt in waterings track by $index">
+                  <td>{{ $index + 1 }}</td>
+                  <td>{{ wt.startdate | date:'medium' }}</td>
+                  <td>{{ wt.enddate | date:'medium' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="col-md-6 box">
+          <div class="box-header">
+            <h3 class="box-title">Últimos Eventos</h3>
+          </div>
+          <div class="box-body no-padding">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th style="width: 10px">#</th>
+                  <th>Evento</th>
+                  <th>Fecha</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="event in events track by $index">
+                  <td>{{ $index + 1 }}</td>
+                  <td>{{ event.message }}</td>
+                  <td>{{ event.date | date:'medium' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+  </aside>
+
+  <div class="control-sidebar-bg"></div>
+</div>
