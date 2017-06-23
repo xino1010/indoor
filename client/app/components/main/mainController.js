@@ -173,10 +173,13 @@ app.controller('mainController', function($scope, $window, $location, $interval,
                 intersect: false,
                 callbacks: {
                     label: function(tooltipItems, data) {
+                    	var label = data.datasets[tooltipItems.datasetIndex].label;
+                    	var unity = null;
                     	if (tooltipItems.datasetIndex == 0 || tooltipItems.datasetIndex == 2)
-                        	return ' Temperatura: ' + tooltipItems.yLabel + 'ºC';
+                        	unity = 'ºC';
                         else
-                        	return ' Humedad: ' + tooltipItems.yLabel + '%';
+                        	unity = '%';
+                        return ' ' + label + ': ' + tooltipItems.yLabel + unity;
                     }
                 }
             },
@@ -248,7 +251,8 @@ app.controller('mainController', function($scope, $window, $location, $interval,
                 intersect: false,
                 callbacks: {
                     label: function(tooltipItems, data) {
-                    	return ' Humedad: ' + tooltipItems.yLabel + '%';
+                    	var label = data.datasets[tooltipItems.datasetIndex].label;
+                    	return ' ' + label + ': ' + tooltipItems.yLabel + '%';
                     }
                 }
             },
@@ -296,8 +300,9 @@ app.controller('mainController', function($scope, $window, $location, $interval,
                 mode: 'index',
                 intersect: false,
                 callbacks: {
-                    label: function(tooltipItems, data) { 
-                        return ' Consumo: ' + tooltipItems.yLabel + 'W';
+                    label: function(tooltipItems, data) {
+                    	var label = data.datasets[tooltipItems.datasetIndex].label;
+                        return ' ' + label + ': ' + tooltipItems.yLabel + 'W';
                     }
                 }
             },
@@ -362,7 +367,8 @@ app.controller('mainController', function($scope, $window, $location, $interval,
                 intersect: false,
                 callbacks: {
                     label: function(tooltipItems, data) { 
-                        return ' Carga: ' + tooltipItems.yLabel;
+                    	var label = data.datasets[tooltipItems.datasetIndex].label;
+                        return ' ' + label + ': ' + tooltipItems.yLabel;
                     }
                 }
             },
