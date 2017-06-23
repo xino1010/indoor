@@ -46,14 +46,14 @@ function Realtime (io) {
 		exec(process.env['TEMP_COMMAND'], function(error, stdout, stderr) {
 			if (error) {
 				log.error('Error executing "' + process.env['TEMP_COMMAND'] + '": ' + error);
-				log.error('Salida de error: ' + stderr);
+				log.error('Salida de error ejecutando "TEMP_COMMAND": ' + stderr);
 			}
 			else {
 				var temp = stdout.replace('\n', '').split('=')[1].replace('\'C', '');
 		  		exec(process.env['LOAD_AVERAGE_COMMAND'], function(error, stdout, stderr) {
 					if (error) {
 						log.error('Error executing "' + process.env['LOAD_AVERAGE_COMMAND'] + '": ' + error);
-						log.error('Salida de error: ' + stderr);
+						log.error('Salida de error ejecutando "LOAD_AVERAGE_COMMAND": ' + stderr);
 					}
 					else {
 						var loadAvgs = stdout.replace('\n', '').split(' ');
