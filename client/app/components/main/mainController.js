@@ -435,6 +435,7 @@ app.controller('mainController', function($scope, $window, $location, $interval,
 	};
 
 	updateGraphicsDht22 = function() {
+		var timeKeys = [];
 		var result = {};
 		for (var i = 0; i < $scope.dataDht22.length; i++) {
 			var element = $scope.dataDht22[i];
@@ -443,6 +444,7 @@ app.controller('mainController', function($scope, $window, $location, $interval,
 			var hour = dt.getHours();
 			var key = day.toString() + "-" + hour.toString();
 			if (!result.hasOwnProperty(key)) {
+				timeKeys.push(key);
 				result[key] = {
 					temperature: {
 						registers: 0,
@@ -459,7 +461,9 @@ app.controller('mainController', function($scope, $window, $location, $interval,
 			result[key].humidity.registers++;
 			result[key].humidity.accum += element.humidity;
 		}
-		for (var key in result) {
+		timeKeys.sort();
+		for (var i = 0; i < timeKeys.length; i++) {
+			var key = timeKeys[i];
 			var averageTemperature = result[key].temperature.accum / result[key].temperature.registers;
 			$scope.configDht22.data.datasets[0].data.push(averageTemperature.toFixed(2));
 			var averageHumidity = result[key].humidity.accum / result[key].humidity.registers;
@@ -470,6 +474,7 @@ app.controller('mainController', function($scope, $window, $location, $interval,
 	};
 
 	updateGraphicsHigrometers = function() {
+		var timeKeys = [];
 		var result = {};
 		for (var i = 0; i < $scope.dataHigrometers.length; i++) {
 			var element = $scope.dataHigrometers[i];
@@ -478,6 +483,7 @@ app.controller('mainController', function($scope, $window, $location, $interval,
 			var hour = dt.getHours();
 			var key = day.toString() + "-" + hour.toString();
 			if (!result.hasOwnProperty(key)) {
+				timeKeys.push(key);
 				result[key] = {
 					higrometer1: {
 						registers: 0,
@@ -507,7 +513,9 @@ app.controller('mainController', function($scope, $window, $location, $interval,
 			result[key].higrometer4.registers++;
 			result[key].higrometer4.accum += element.higrometer4;
 		}
-		for (var key in result) {
+		timeKeys.sort();
+		for (var i = 0; i < timeKeys.length; i++) {
+			var key = timeKeys[i];
 			var averageHigrometer1 = result[key].higrometer1.accum / result[key].higrometer1.registers;
 			$scope.configHigrometers.data.datasets[0].data.push(averageHigrometer1.toFixed(2));
 			var averageHigrometer2 = result[key].higrometer2.accum / result[key].higrometer2.registers;
@@ -522,6 +530,7 @@ app.controller('mainController', function($scope, $window, $location, $interval,
 	};
 
 	updateGraphicsElectricity = function() {
+		var timeKeys = [];
 		var result = {};
 		for (var i = 0; i < $scope.dataElectricity.length; i++) {
 			var element = $scope.dataElectricity[i];
@@ -530,6 +539,7 @@ app.controller('mainController', function($scope, $window, $location, $interval,
 			var hour = dt.getHours();
 			var key = day.toString() + "-" + hour.toString();
 			if (!result.hasOwnProperty(key)) {
+				timeKeys.push(key);
 				result[key] = {
 					watts: {
 						registers: 0,
@@ -540,7 +550,9 @@ app.controller('mainController', function($scope, $window, $location, $interval,
 			result[key].watts.registers++;
 			result[key].watts.accum += element.watts;
 		}
-		for (var key in result) {
+		timeKeys.sort();
+		for (var i = 0; i < timeKeys.length; i++) {
+			var key = timeKeys[i];
 			var averageWatts = result[key].watts.accum / result[key].watts.registers;
 			$scope.configElectricity.data.datasets[0].data.push(averageWatts.toFixed(2));
 			$scope.configElectricity.data.labels.push(key);
@@ -549,6 +561,7 @@ app.controller('mainController', function($scope, $window, $location, $interval,
 	};
 
 	updateGraphicsSysteminfo = function (){
+		var timeKeys = [];
 		var result = {};
 		for (var i = 0; i < $scope.dataSysteminfo.length; i++) {
 			var element = $scope.dataSysteminfo[i];
@@ -557,6 +570,7 @@ app.controller('mainController', function($scope, $window, $location, $interval,
 			var hour = dt.getHours();
 			var key = day.toString() + "-" + hour.toString();
 			if (!result.hasOwnProperty(key)) {
+				timeKeys.push(key);
 				result[key] = {
 					temperature: {
 						registers: 0,
@@ -573,8 +587,7 @@ app.controller('mainController', function($scope, $window, $location, $interval,
 					avg15: {
 						registers: 0,
 						accum: 0
-					},
-
+					}
 				};
 			}
 			result[key].temperature.registers++;
@@ -586,7 +599,9 @@ app.controller('mainController', function($scope, $window, $location, $interval,
 			result[key].avg15.registers++;
 			result[key].avg15.accum += parseFloat(element.avg15);
 		}
-		for (var key in result) {
+		timeKeys.sort();
+		for (var i = 0; i < timeKeys.length; i++) {
+			var key = timeKeys[i];
 			var averageAvg = result[key].avg.accum / result[key].avg.registers;
 			$scope.configSysteminfo.data.datasets[0].data.push(averageAvg.toFixed(2));
 			var averageAvg5 = result[key].avg5.accum / result[key].avg5.registers;
