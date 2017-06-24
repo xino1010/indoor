@@ -447,8 +447,14 @@ app.controller('mainController', function($scope, $window, $location, $interval,
 			var element = $scope.dataDht22[i];
 			var dt = new Date(element.date);
 			var day = dt.getDate();
+			var strDay = day.toString();
+			if (day < 10)
+				strDay = "0" + strDay;
 			var hour = dt.getHours();
-			var key = day.toString() + "-" + hour.toString();
+			var strHour = hour.toString();
+			if (hour < 10)
+				strHour = "0" + strHour;
+			var key = strDay + "-" + strHour;
 			if (!result.hasOwnProperty(key)) {
 				timeKeys.push(key);
 				result[key] = {
@@ -486,8 +492,14 @@ app.controller('mainController', function($scope, $window, $location, $interval,
 			var element = $scope.dataHigrometers[i];
 			var dt = new Date(element.date);
 			var day = dt.getDate();
+			var strDay = day.toString();
+			if (day < 10)
+				strDay = "0" + strDay;
 			var hour = dt.getHours();
-			var key = day.toString() + "-" + hour.toString();
+			var strHour = hour.toString();
+			if (hour < 10)
+				strHour = "0" + strHour;
+			var key = strDay + "-" + strHour;
 			if (!result.hasOwnProperty(key)) {
 				timeKeys.push(key);
 				result[key] = {
@@ -542,8 +554,14 @@ app.controller('mainController', function($scope, $window, $location, $interval,
 			var element = $scope.dataElectricity[i];
 			var dt = new Date(element.date);
 			var day = dt.getDate();
+			var strDay = day.toString();
+			if (day < 10)
+				strDay = "0" + strDay;
 			var hour = dt.getHours();
-			var key = day.toString() + "-" + hour.toString();
+			var strHour = hour.toString();
+			if (hour < 10)
+				strHour = "0" +  strHour;
+			var key = strDay + "-" + strHour;
 			if (!result.hasOwnProperty(key)) {
 				timeKeys.push(key);
 				result[key] = {
@@ -573,8 +591,14 @@ app.controller('mainController', function($scope, $window, $location, $interval,
 			var element = $scope.dataSysteminfo[i];
 			var dt = new Date(element.date);
 			var day = dt.getDate();
+			var strDay = day.toString();
+			if (day < 10)
+				strDay = "0" + strDay;
 			var hour = dt.getHours();
-			var key = day.toString() + "-" + hour.toString();
+			var strHour = hour.toString();
+			if (hour < 10)
+				strHour = "0" + strHour;
+			var key = strDay + "-" + strHour;
 			if (!result.hasOwnProperty(key)) {
 				timeKeys.push(key);
 				result[key] = {
