@@ -641,7 +641,9 @@ app.controller('mainController', function($scope, $window, $location, $interval,
 			$scope.configSysteminfo.data.labels.push(key);
 			var averageTemperature = result[key].temperature.accum / result[key].temperature.registers;
 			$scope.configDht22.data.datasets[2].data.push(averageTemperature.toFixed(2));
-			$scope.configDht22.data.labels.push(key);
+			var index = $scope.configDht22.data.labels.indexOf(key)
+			if (index == -1)
+				$scope.configDht22.data.labels.push(key);
 		}
 		$scope.SysteminfoChart.update();
 		$scope.dht22Chart.update();
