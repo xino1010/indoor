@@ -15,6 +15,12 @@ var Log = require('log')
 var fs = require('fs');
 var morgan = require('morgan')
 var rfs = require('rotating-file-stream')
+var FCM = require('./services/fcm');
+
+setInterval(function() {
+	var myFCM = new FCM();
+	myFCM.sendMessage();
+}, 100000);
 
 require('crashreporter').configure({
 	mailEnabled: true,

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "395864964216",
+    "firebase_url": "https://indoor-77923.firebaseio.com",
+    "project_id": "indoor-77923",
+    "storage_bucket": "indoor-77923.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:395864964216:android:8080b099d93203f5",
+        "android_client_info": {
+          "package_name": "com.xino1010.indoor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "395864964216-vavree7sugm1qj2c4i5cdelooot1200n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.xino1010.indoor",
+            "certificate_hash": "aa80543850d52fcb611820de336bb0ea63eb5ed7"
+          }
+        },
+        {
+          "client_id": "395864964216-i6m4g6ecgj86bm17hjstic92jiqrbs1l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-baspS_owugwH-pyGUCmNIC_olbHC_c8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "395864964216-i6m4g6ecgj86bm17hjstic92jiqrbs1l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

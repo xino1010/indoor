@@ -31,6 +31,7 @@
     "log": "^1.4.0",
     "mongoose": "^4.9.9",
     "morgan": "^1.8.2",
+    "node-gcm": "^0.14.6",
     "nodemailer": "^4.0.1",
     "nodemon": "^1.11.0",
     "rotating-file-stream": "^1.2.2",
