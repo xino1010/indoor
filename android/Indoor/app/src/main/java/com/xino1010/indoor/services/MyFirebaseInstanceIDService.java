@@ -1,4 +1,4 @@
-package com.xino1010.indoor;
+package com.xino1010.indoor.services;
 
 import android.util.Log;
 

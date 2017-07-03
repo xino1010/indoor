@@ -1,79 +1,87 @@
 package com.xino1010.indoor;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.appcompat.*;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
+import android.widget.EditText;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "INDOOR";
+    private EditText usernameEditText;
+    private EditText passwordEditText;
+    private TextView errorLogintextView;
+    private Context context;
+    private Button loginButton;
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        loadLoginPreferences();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        saveLoginPreferences();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final Context context = getApplicationContext();
+        // Init widgets from view
+        this.context = getApplicationContext();
+        this.usernameEditText = (EditText) findViewById(R.id.usernameEditText);
+        this.passwordEditText = (EditText) findViewById(R.id.passwordEditText);
+        this.errorLogintextView = (TextView) findViewById(R.id.errorLogintextView);
+        this.loginButton = (Button) findViewById(R.id.loginButton);
 
-        final View loginButton = findViewById(R.id.loginButton);
-        loginButton.setOnClickListener(new View.OnClickListener(){
+        this.loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "Login button click");
-
-                RequestQueue queue = Volley.newRequestQueue(context);
-                String url = BuildConfig.BASE_URL + "/auth/login";
-                StringRequest postRequest = new StringRequest(Request.Method.POST, url,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            try {
-                                Log.d(TAG, response);
-                                JSONObject obj = new JSONObject(response);
-                                Log.d(TAG, obj.toString());
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    },
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            // error
-                            Log.d(TAG, "Coult not parse malformed JSON: " + error.toString());
-                        }
-                    }
-                ) {
-                    @Override
-                    protected Map<String, String> getParams() {
-                        Map<String, String>  params = new HashMap<String, String>();
-                        params.put("username", "xino1010");
-                        params.put("password", "Amistat1");
-                        return params;
-                    }
-                };
-
-                queue.add(postRequest);
+                errorLogintextView.setText("");
+                String username = usernameEditText.getText().toString();
+                if (username.isEmpty()) {
+                    errorLogintextView.setText("User field can not be empty");
+                    return;
+                }
+                String password = passwordEditText.getText().toString();
+                if (password.isEmpty()) {
+                    errorLogintextView.setText("Password field can not be empty");
+                    return;
+                }
+                Api.login(context, username, password, errorLogintextView);
             }
         });
+    }
 
+    private void saveLoginPreferences() {
+        SharedPreferences settings = getSharedPreferences(Constants.APP_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = settings.edit();
+        String username = usernameEditText.getText().toString();
+        String password = passwordEditText.getText().toString();
+        System.out.println("onPause save username: " + username);
+        System.out.println("onPause save password: " + password);
+        editor.putString(Constants.PREFERENCES_USERNAME, username);
+        editor.putString(Constants.PREFERENCES_PASSWORD, password);
+        editor.commit();
+    }
+
+    private void loadLoginPreferences() {
+        SharedPreferences settings = getSharedPreferences(Constants.APP_NAME, Context.MODE_PRIVATE);
+        String usernamePreferences = settings.getString(Constants.PREFERENCES_USERNAME, "");
+        String passwordPreferences = settings.getString(Constants.PREFERENCES_PASSWORD, "");
+        System.out.println("onResume load name: " + usernamePreferences);
+        System.out.println("onResume load password: " + passwordPreferences);
+        if (!usernamePreferences.isEmpty() || !passwordPreferences.isEmpty()) {
+            Api.login(context, usernamePreferences, passwordPreferences, errorLogintextView);
+        }
     }
 
 }

@@ -5,3 +5,4 @@ sftp-config.json
 server/process.env
 info.txt
 crash**
+.idea
