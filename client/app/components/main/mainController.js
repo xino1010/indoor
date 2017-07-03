@@ -334,6 +334,13 @@ app.controller('mainController', function($scope, $window, $location, $interval,
             labels: [],
             datasets: [
             	{
+	                label: "Temperatura Sistema",
+	                backgroundColor: $scope.chartColors.blue,
+	                borderColor: $scope.chartColors.blue,
+	                data: [],
+	                fill: false,
+	            },
+	            {
 	                label: "Carga",
 	                backgroundColor: $scope.chartColors.red,
 	                borderColor: $scope.chartColors.red,
@@ -366,9 +373,12 @@ app.controller('mainController', function($scope, $window, $location, $interval,
                 mode: 'index',
                 intersect: false,
                 callbacks: {
-                    label: function(tooltipItems, data) { 
+                    label: function(tooltipItems, data) {
                     	var label = data.datasets[tooltipItems.datasetIndex].label;
-                        return ' ' + label + ': ' + tooltipItems.yLabel;
+                    	var unity = '';
+                    	if (tooltipItems.datasetIndex == 0)
+                        	unity = 'ºC';
+                        return ' ' + label + ': ' + tooltipItems.yLabel + unity; 
                     }
                 }
             },
@@ -632,21 +642,17 @@ app.controller('mainController', function($scope, $window, $location, $interval,
 		timeKeys.sort();
 		for (var i = 0; i < timeKeys.length; i++) {
 			var key = timeKeys[i];
-			var averageAvg = result[key].avg.accum / result[key].avg.registers;
-			$scope.configSysteminfo.data.datasets[0].data.push(averageAvg.toFixed(2));
-			var averageAvg5 = result[key].avg5.accum / result[key].avg5.registers;
-			$scope.configSysteminfo.data.datasets[1].data.push(averageAvg5.toFixed(2));
-			var averageAvg15 = result[key].avg15.accum / result[key].avg15.registers;
-			$scope.configSysteminfo.data.datasets[2].data.push(averageAvg15.toFixed(2));
-			$scope.configSysteminfo.data.labels.push(key);
 			var averageTemperature = result[key].temperature.accum / result[key].temperature.registers;
-			$scope.configDht22.data.datasets[2].data.push(averageTemperature.toFixed(2));
-			var index = $scope.configDht22.data.labels.indexOf(key)
-			if (index == -1)
-				$scope.configDht22.data.labels.push(key);
+			$scope.configSysteminfo.data.datasets[0].data.push(averageTemperature.toFixed(2));
+			var averageAvg = result[key].avg.accum / result[key].avg.registers;
+			$scope.configSysteminfo.data.datasets[1].data.push(averageAvg.toFixed(2));
+			var averageAvg5 = result[key].avg5.accum / result[key].avg5.registers;
+			$scope.configSysteminfo.data.datasets[2].data.push(averageAvg5.toFixed(2));
+			var averageAvg15 = result[key].avg15.accum / result[key].avg15.registers;
+			$scope.configSysteminfo.data.datasets[3].data.push(averageAvg15.toFixed(2));
+			$scope.configSysteminfo.data.labels.push(key);
 		}
 		$scope.SysteminfoChart.update();
-		$scope.dht22Chart.update();
 	};
 
 	updateSensors = function() {
