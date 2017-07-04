@@ -183,20 +183,14 @@ function Socket(io) {
 							sendLastNevents(socket, 20);
 							// Send last 10 watering
 							sendLastWaterings(socket, 10);
-							// Send current status of signals
-							socket.emit('signals', _this.rt.getSignals());
-							// Send current data of higrometers
-							socket.emit('higrometers', _this.rt.getHigrometers());
-							// Send current data of dht22
-							socket.emit('dht22', _this.rt.getDht22());
 							// Send current status of watering
 							socket.emit('watering', _this.rt.getWatering());
 							// Send current status of process change times
 							socket.emit('change-times', _this.rt.getChangingTimes());
 							// Send current status of timers
 							socket.emit('times', _this.rt.getTimes());
-							// Send current system info
-							socket.emit('systeminfo', _this.rt.getSystemInfo());
+							// Send kpis
+							socket.emit('kpis', _this.rt.getKpis());
 						}
 					});
 				}

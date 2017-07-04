@@ -36,6 +36,7 @@
     "nodemon": "^1.11.0",
     "rotating-file-stream": "^1.2.2",
     "serialport": "^4.0.7",
+    "serve-favicon": "^2.4.3",
     "socket.io": "^2.0.1"
   }
 }

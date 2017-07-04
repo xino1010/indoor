@@ -1,4 +1,4 @@
-app.factory('socket', function($rootScope, users, auth) {
+app.factory('socket', function($rootScope, users, auth, realtime) {
     var socket = null;
 
     return {
@@ -33,6 +33,9 @@ app.factory('socket', function($rootScope, users, auth) {
                 });
                 socket.on('user-disconnected', function (userDisconnected) {
                     users.updateUser(userDisconnected);
+                });
+                socket.on('kpis', function(kpis) {
+                    realtime.setKpis(kpis);
                 });
                 if (callBack)
                     callBack();

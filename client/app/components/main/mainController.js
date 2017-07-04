@@ -1,57 +1,14 @@
-app.controller('mainController', function($scope, $window, $location, $interval, auth, users, socket, localstorage) {
+app.controller('mainController', function($scope, $window, $location, $interval, auth, users, socket, localstorage, realtime) {
 	$scope.user = auth.getUser();
 	$scope.users = users.getUsers();
+	$scope.kpis = realtime.getKpis();
 	$scope.dataDht22 = [];
 	$scope.dataHigrometers = [];
 	$scope.dataElectricity = [];
 	$scope.dataSysteminfo = [];
-	$scope.electricity = {
-		irms: {
-			name: 'Amperios',
-			value: 0,
-			unity: 'A'
-		},
-		power: {
-			name: 'Potencia',
-			value: 0,
-			unity: 'W'
-		},
-		watts: {
-			name: 'Vatios',
-			value: 0,
-			unity: 'W'
-		}
-	};
-	$scope.currentSystemInfo = {
-		temperature: {
-			name: 'Temperatura sistema',
-			value: 0,
-			unity: 'ºC',
-			icon: 'fa-thermometer-full'
-		},
-		avg: {
-			name: 'Carga sistema',
-			value: 0,
-			unity: '',
-			icon: 'fa-spinner'
-		},		
-		avg5: {
-			name: 'Carga sistema 5 min',
-			value: 0,
-			unity: '',
-			icon: 'fa-spinner'
-		},		
-		avg15: {
-			name: 'Carga sistema 15 min',
-			value: 0,
-			unity: '',
-			icon: 'fa-spinner'
-		},
-	};
 	$scope.sensors = {
 		dht22: {
 			temperature: {
-				current: 0,
 				lastHour: {
 					registers: 0,
 					average: 0
@@ -66,7 +23,6 @@ app.controller('mainController', function($scope, $window, $location, $interval,
 				},
 			},
 			humidity: {
-				current: 0,
 				lastHour: {
 					registers: 0,
 					average: 0
@@ -82,53 +38,8 @@ app.controller('mainController', function($scope, $window, $location, $interval,
 			},
 		},
 	}
-	$scope.currentHigrometers = {
-		higrometer1: {
-			name: 'Higrómetro 1',
-			value: 0,
-		},		
-		higrometer2: {
-			name: 'Higrómetro 2',
-			value: 0,
-		},		
-		higrometer3: {
-			name: 'Higrómetro 3',
-			value: 0,
-		},		
-		higrometer4: {
-			name: 'Higrómetro 4',
-			value: 0,
-		}
-	};
 	$scope.events = [];
 	$scope.waterings = [];
-	$scope.signals = {
-		ELECTROVALVULA_BOMBA_AGUA: {
-			name: "Bomba de agua",
-			status: false,
-		},
-		ELECTROVALVULA_DEPOSITO_1:  {
-			name: "Electroválvula 1",
-			status: false,
-		},
-		ELECTROVALVULA_DEPOSITO_2:  {
-			name: "Electroválvula 2",
-			status: false,
-		},
-		ELECTROVALVULA_DEPOSITO_3:  {
-			name: "Electroválvula 3",
-			status: false,
-		},
-		ELECTROVALVULA_DEPOSITO_4:  {
-			name: "Electroválvula 4",
-			status: false,
-		},
-		NIVEL_BAJO_DEPOSITO_GENERAL:  {
-			name: "Nivel bajo depósito general",
-			status: false,
-		},
-	};
-
 	$scope.chartColors = {
 		red: 'rgb(255, 99, 132)',
 		blue: 'rgb(54, 162, 235)',
@@ -666,11 +577,6 @@ app.controller('mainController', function($scope, $window, $location, $interval,
 			$scope.sensors.dht22.temperature.lastDay.average += element.temperature;
 			$scope.sensors.dht22.humidity.lastDay.registers++;
 			$scope.sensors.dht22.humidity.lastDay.average += element.humidity;
-			// Último minuto
-			if (i == numberOfDataDht22 - 1 && diffSeconds <= 60) {
-				$scope.sensors.dht22.temperature.current = element.temperature;
-				$scope.sensors.dht22.humidity.current = element.humidity;
-			}
 		}
 		$scope.sensors.dht22.temperature.lastHour.average /= $scope.sensors.dht22.temperature.lastHour.registers;
 		$scope.sensors.dht22.temperature.lastDay.average /= $scope.sensors.dht22.temperature.lastDay.registers;
@@ -722,45 +628,10 @@ app.controller('mainController', function($scope, $window, $location, $interval,
 	socket.on('new-watering', function(newWatering) {
 		$scope.waterings.unshift(newWatering);
 	});
-	socket.on('electricity', function(newElectricity) {
-		for (var keyElectricity in newElectricity) {
-			if ($scope.electricity.hasOwnProperty(keyElectricity)) {
-				$scope.electricity[keyElectricity].value = newElectricity[keyElectricity];
-			}
-		}
-	});
-	socket.on('dht22', function(newDHT22) {
-		$scope.sensors.dht22.temperature.current = newDHT22.temperature;
-		$scope.sensors.dht22.humidity.current = newDHT22.humidity;
-		$scope.dataDht22.push(newDHT22);
-		updateSensors();
-	});
-	socket.on('higrometers', function(newHigrometer) {
-		for (var higrometerKey in newHigrometer) {
-			if ($scope.currentHigrometers.hasOwnProperty(higrometerKey)) {
-				$scope.currentHigrometers[higrometerKey].value = newHigrometer[higrometerKey];
-			}
-		}
-	});
-	socket.on('systeminfo', function(systemInfo) {
-		for (var key in systemInfo) {
-			if ($scope.currentSystemInfo.hasOwnProperty(key)) {
-				$scope.currentSystemInfo[key].value = systemInfo[key];
-			}
-		}
-	});
 	socket.on('event', function(event) {
 		$scope.events.pop();
 		$scope.events.unshift(event);
 	});
-	socket.on('signals', function(signals) {
-		for (var signalKey in signals) {
-			if ($scope.signals.hasOwnProperty(signalKey)) {
-				$scope.signals[signalKey].status = signals[signalKey];
-			}
-		}
-	});
-
 	$scope.watering = false;
 	$scope.water = function() {
 		socket.emit('water', true);
@@ -768,7 +639,6 @@ app.controller('mainController', function($scope, $window, $location, $interval,
 	socket.on('watering', function(data) {
 		$scope.watering = data;
 	});
-
 	$scope.changingTimes = false;
 	$scope.times = {
 		solenoid1: {

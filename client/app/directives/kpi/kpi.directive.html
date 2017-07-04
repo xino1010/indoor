@@ -1,0 +1,21 @@
+<div class="col-md-3 col-sm-6 col-xs-12">
+  <div class="info-box">
+    <span ng-if="data.canBeActivated" class="info-box-icon" style="background: {{ data.actived ? data.colorActivated : data.color }}; color: white;">
+      <i class="fa {{ data.icon }}"></i>
+    </span>
+    <span ng-if="!data.canBeActivated" class="info-box-icon" style="background: {{ data.color }}; color: white;">
+      <i class="fa {{ data.icon }}"></i>
+    </span>
+    <div class="info-box-content">
+      <div class="form-group">
+        <span class="info-box-text">{{ data.name }}</span>
+        <span ng-if="data.canBeActivated" class="info-box-number">
+          {{ data.activated ? "Activo" : "Desactivado" }}
+        </span>
+        <span ng-if="!data.canBeActivated" class="info-box-number">
+          {{ data.value | number:2 }}{{ data.unity }}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

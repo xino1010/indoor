@@ -16,6 +16,7 @@ var fs = require('fs');
 var morgan = require('morgan')
 var rfs = require('rotating-file-stream')
 var FCM = require('./services/fcm');
+var favicon = require('serve-favicon');
 
 setInterval(function() {
 	var myFCM = new FCM();
@@ -91,6 +92,7 @@ app.use(express.static(__dirname + '/../client'));
 app.use(express.static(__dirname + '/../client/assets'));
 app.use(express.static(__dirname + '/../client/views'));
 app.use(express.static(__dirname + '/../node_modules'));
+app.use(favicon(__dirname + '/../client/assets/img/favicon.ico'));
 app.use(morgan(':date[iso] - Remote address: :remote-addr - Remote user: :remote-user - Method: :method - Url: :url - Http version: HTTP/:http-version - Http code status: :status - Response time: :response-time ms', {stream: accessLogStream}))
 
 // ROUTES

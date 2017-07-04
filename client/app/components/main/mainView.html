@@ -38,29 +38,12 @@
     <section class="content">
 
       <div class="row">
-        <div class="col-md-3 col-sm-6 col-xs-12" ng-repeat="(key, value) in electricity">
-          <div class="info-box">
-            <span class="info-box-icon bg-yellow"><i class="fa fa-bolt"></i></span>
-            <div class="info-box-content">
-              <div class="form-group">
-                <span class="info-box-text">{{ value.name }}</span>
-                <span class="info-box-number">{{ value.value | number:2 }}{{ value.unity }}</span>
-              </div>
-            </div>
-          </div>
+        <div ng-repeat="(kpiKey, kpiValue) in kpis">
+          <kpi data="kpiValue"></kpi>
         </div>
       </div>
 
       <div class="row">
-        <div class="col-md-3 col-sm-6 col-xs-12">
-          <div class="info-box">
-            <span class="info-box-icon bg-red"><i class="fa fa-thermometer-quarter"></i></span>
-            <div class="info-box-content">
-              <span class="info-box-text">Temp actual</span>
-              <span class="info-box-number">{{ sensors.dht22.temperature.current | number:2 }}ºC</span>
-            </div>
-          </div>
-        </div>
         <div class="col-md-3 col-sm-6 col-xs-12">
           <div class="info-box">
             <span class="info-box-icon bg-red"><i class="fa fa-thermometer-half"></i></span>
@@ -100,15 +83,6 @@
           <div class="info-box">
             <span class="info-box-icon bg-aqua"><i class="fa fa-cloud"></i></span>
             <div class="info-box-content">
-              <span class="info-box-text">Humedad actual</span>
-              <span class="info-box-number">{{ sensors.dht22.humidity.current }}%</span>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3 col-sm-6 col-xs-12">
-          <div class="info-box">
-            <span class="info-box-icon bg-aqua"><i class="fa fa-cloud"></i></span>
-            <div class="info-box-content">
               <span class="info-box-text">Humedad media 1h</span>
               <span class="info-box-number number-kpi">{{ sensors.dht22.humidity.lastHour.average | number:2 }}%</span>
               <span class="info-box-text">Datos</span>
@@ -135,32 +109,6 @@
             <div class="info-box-content">
               <span class="info-box-text">Humedad media semana</span>
               <span class="info-box-number">{{ sensors.dht22.humidity.lastWeek.average | number:2 }}%</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div ng-repeat="(higrometerKey, higrometerValue) in currentHigrometers" class="col-md-3 col-sm-6 col-xs-12">
-          <div class="info-box">
-            <span class="info-box-icon bg-green"><i class="fa fa-leaf"></i></span>
-            <div class="info-box-content">
-              <span class="info-box-text">{{ higrometerValue.name }}</span>
-              <span class="info-box-number">{{ higrometerValue.value }}%</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-md-3 col-sm-6 col-xs-12" ng-repeat="(key, value) in currentSystemInfo">
-          <div class="info-box">
-            <span class="info-box-icon background-purple"><i class="fa {{ value.icon }} color-white"></i></span>
-            <div class="info-box-content">
-              <div class="form-group">
-                <span class="info-box-text">{{ value.name }}</span>
-                <span class="info-box-number">{{ value.value | number:2 }}{{ value.unity }}</span>
-              </div>
             </div>
           </div>
         </div>
@@ -193,15 +141,6 @@
           </button>
         </div>
         <div class="col-md-12"></div>
-        <div ng-repeat="(key, value) in signals" class="col-md-3 col-sm-6 col-xs-12" style="margin-top: 30px;">
-          <div class="info-box">
-            <span class="info-box-icon" ng-class="value.status ? 'bg-purple' : 'bg-navy'"><i class="fa fa-signal" style="color: white;"></i></span>
-            <div class="info-box-content">
-              <span class="info-box-text">{{ value.name }}</span>
-              <span class="info-box-number">{{ value.status ? "Activo" : "Desactivado" }}</span>
-            </div>
-          </div>
-        </div>
       </div>
 
       <div class="row">

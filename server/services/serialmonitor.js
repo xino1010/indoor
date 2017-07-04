@@ -67,7 +67,7 @@ function SerialMonitor(realtime) {
 	this.countDHT22 = 0;
 	this.countElectricity = 0;
 	this.timeSignals = {
-		NIVEL_BAJO_DEPOSITO_GENERAL: 0,
+		lowLevelBomb: 0,
 	};
 	this.watering = null;
 }
@@ -158,7 +158,7 @@ SerialMonitor.prototype = {
 						}
 					}
 					else if (serialData.type == Events.DHT22) {
-						if (serialData.hasOwnProperty('data') && serialData.data.hasOwnProperty('temperature') && serialData.data.hasOwnProperty('humidity')) {
+						if (serialData.hasOwnProperty('data') && serialData.data.hasOwnProperty('temperature') && serialData.data.hasOwnProperty('humidity') && serialData.data.temperature > 0 && serialData.data.humidity > 0) {
 							var dht22 = new DHT22({
 								temperature: serialData.data.temperature.toFixed(2),
 								humidity: serialData.data.humidity.toFixed(2),
@@ -248,11 +248,11 @@ SerialMonitor.prototype = {
 						if (serialData.hasOwnProperty('data')) {
 							for (var signalKey in serialData.data) {
 								var active = serialData.data[signalKey] == 1 ? true : false;
-								if (!active && signalKey == "NIVEL_BAJO_DEPOSITO_GENERAL") {
+								if (!active && signalKey == "lowLevelBomb") {
 									var currentEpoch = (new Date).getTime();
 									// Esperar 12h para enviar el siguiente email
-									if (_this.timeSignals.NIVEL_BAJO_DEPOSITO_GENERAL == 0 || (currentEpoch - _this.timeSignals.NIVEL_BAJO_DEPOSITO_GENERAL >= 43200000)) {
-										_this.timeSignals.NIVEL_BAJO_DEPOSITO_GENERAL = currentEpoch;
+									if (_this.timeSignals.lowLevelBomb == 0 || (currentEpoch - _this.timeSignals.lowLevelBomb >= 43200000)) {
+										_this.timeSignals.lowLevelBomb = currentEpoch;
 										sendMailToUsers("Arduino: Falta agua en el tanque.");
 									}
 								}

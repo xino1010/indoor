@@ -8,12 +8,12 @@
 #define RELE_APAGADO 0
 // CONEXIONES
 #define DHT22_PIN 2
-#define ELECTROVALVULA_DEPOSITO_1 3
-#define ELECTROVALVULA_DEPOSITO_2 4
-#define ELECTROVALVULA_DEPOSITO_3 5
-#define ELECTROVALVULA_DEPOSITO_4 6
-#define ELECTROVALVULA_BOMBA_AGUA 7
-#define NIVEL_BAJO_DEPOSITO_GENERAL 8
+#define solenoid1 3
+#define solenoid2 4
+#define solenoid3 5
+#define solenoid4 6
+#define bomb 7
+#define lowLevelBomb 8
 #define LED 9
 // SENSORES
 #define SENSOR_CORRIENTE A0
@@ -34,7 +34,7 @@
 dht DHT;
 unsigned long ultimoTiempoDHT, ultimoTiemposElectrovalvulas;
 unsigned long ultimoTiempoNiveles, ultimoTiempoCorriente, ultimoTiempoLDR;
-unsigned long pinsElectroValvulas[NUMERO_ELECTROVALVULAS] = {ELECTROVALVULA_DEPOSITO_1, ELECTROVALVULA_DEPOSITO_2, ELECTROVALVULA_DEPOSITO_3, ELECTROVALVULA_DEPOSITO_4};
+unsigned long pinsElectroValvulas[NUMERO_ELECTROVALVULAS] = {solenoid1, solenoid2, solenoid3, solenoid4};
 unsigned long tiemposElectrovalvulas[NUMERO_ELECTROVALVULAS] = {1000, 1000, 1000, 1000};
 unsigned long tiempoBombaAgua = 1000;
 boolean estadoLed = false;
@@ -44,8 +44,8 @@ void conectarPins() {
   for (int i = 0; i < NUMERO_ELECTROVALVULAS; i++) {
     pinMode(pinsElectroValvulas[i], OUTPUT);
   }
-  pinMode(ELECTROVALVULA_BOMBA_AGUA, OUTPUT);
-  pinMode(NIVEL_BAJO_DEPOSITO_GENERAL, INPUT);
+  pinMode(bomb, OUTPUT);
+  pinMode(lowLevelBomb, INPUT);
   pinMode(LED, OUTPUT);
   //pinMode(LDR, INPUT);
 }
@@ -56,9 +56,9 @@ void leerElectroValvulas() {
   root["status"] = "success";
   root["type"] = "signals";
   JsonObject& data = root.createNestedObject("data");
-  data["ELECTROVALVULA_BOMBA_AGUA"] = digitalRead(ELECTROVALVULA_BOMBA_AGUA);
+  data["bomb"] = digitalRead(bomb);
   for (int i = 0; i < NUMERO_ELECTROVALVULAS; i++) {
-    String key = String("ELECTROVALVULA_DEPOSITO_") + String(i + 1);
+    String key = String("solenoid") + String(i + 1);
     data[key] = digitalRead(pinsElectroValvulas[i]);
   }
   imprimeJson(root);
@@ -73,7 +73,7 @@ void leerEstadoNiveles() {
     root["status"] = "success";
     root["type"] = "signals";
     JsonObject& data = root.createNestedObject("data");
-    data["NIVEL_BAJO_DEPOSITO_GENERAL"] = digitalRead(NIVEL_BAJO_DEPOSITO_GENERAL);
+    data["lowLevelBomb"] = digitalRead(lowLevelBomb);
     imprimeJson(root);
     cambiaEstadoLed();
   }
@@ -89,9 +89,9 @@ void calculaCorriente() {
     root["status"] = "success";
     root["type"] = "electricity";
     JsonObject& data = root.createNestedObject("data");
-    data["irms"] = Irms;
+    data["amps"] = Irms;
     data["power"] = Irms * 227.0;
-    data["watts"] = Irms * 230.0;
+    data["consumption"] = Irms * 230.0;
     imprimeJson(root);
     cambiaEstadoLed();
   }
@@ -101,7 +101,7 @@ void inicializarConexiones() {
   for (int i = 0; i < NUMERO_ELECTROVALVULAS; i++) {
     digitalWrite(pinsElectroValvulas[i], RELE_APAGADO);
   }
-  digitalWrite(ELECTROVALVULA_BOMBA_AGUA, RELE_APAGADO);
+  digitalWrite(bomb, RELE_APAGADO);
   emon1.current(SENSOR_CORRIENTE, 30);
 }
 
@@ -161,8 +161,8 @@ void leerDHT22() {
       root["status"] = "success";
       root["type"] = "dht22";
       JsonObject& data = root.createNestedObject("data");
-      data["temperature"] = DHT.temperature;
-      data["humidity"] = DHT.humidity;
+      data["roomTemperature"] = DHT.temperature;
+      data["roomHumidity"] = DHT.humidity;
       imprimeJson(root);
     }
     cambiaEstadoLed();
@@ -255,8 +255,8 @@ void riegoManual() {
   leerElectroValvulas();
   enviarRiego(INICIO_RIEGO, -1);
   enviarEvento("INICIANDO_RIEGO");
-  enviarEvento("ELECTROVALVULA_BOMBA_AGUA_ACTIVA");
-  digitalWrite(ELECTROVALVULA_BOMBA_AGUA, RELE_ENCENDIDO);
+  enviarEvento("BOMBA_ACTIVA");
+  digitalWrite(bomb, RELE_ENCENDIDO);
   leerElectroValvulas();
   // Esperar un poco a que la bomba tenga agua en las mangueras
   delay(tiempoBombaAgua);
@@ -279,8 +279,8 @@ void riegoManual() {
   ////////////////////////////////
   leerElectroValvulas();
   enviarRiego(FIN_RIEGO, -1);
-  enviarEvento("ELECTROVALVULA_BOMBA_AGUA_DESACTIVADA");
-  digitalWrite(ELECTROVALVULA_BOMBA_AGUA, RELE_APAGADO);
+  enviarEvento("BOMBA_DESACTIVADA");
+  digitalWrite(bomb, RELE_APAGADO);
   leerElectroValvulas();
   enviarEvento("RIEGO_FINALIZADO");
   cambiaEstadoLed();

@@ -1,28 +1,32 @@
 var exec = require('child_process').exec;
 var SystemInfo = require('../models/systeminfo');
+var Kpi = require('../models/kpi');
 
 function Realtime (io) {
 	var _this = this;
 	this.io = io;
 	this.watering = false;
 	this.changingTimes = false;
-	this.signals = {
-		ELECTROVALVULA_DEPOSITO_1: false,
-		ELECTROVALVULA_DEPOSITO_2: false,
-		ELECTROVALVULA_DEPOSITO_3: false,
-		ELECTROVALVULA_DEPOSITO_4: false,
-		ELECTROVALVULA_BOMBA_AGUA: false,
-		NIVEL_BAJO_DEPOSITO_GENERAL: false,
-	};
-	this.higrometers = {
-		higrometer1: 0,
-		higrometer2: 0,
-		higrometer3: 0,
-		higrometer4: 0,
-	};
-	this.dht22 = {
-		temperature: 0,
-		humidity: 0,
+	this.kpis = {
+		amps: new Kpi('amps', 0, 'Amperios', 'A', '#f39c12', null, 'fa-bolt', false, null),
+		power: new Kpi('power', 0, 'Potencia', 'W', '#f39c12', null, 'fa-bolt', false, null),
+		consumption: new Kpi('consumption', 0, 'Consumo', 'W', '#f39c12', null, 'fa-bolt', false, null),
+		roomTemperature: new Kpi('roomTemperature', 0, 'Temperatura Ambiente', 'ºC', '#dd4b39', null, 'fa-thermometer-quarter', false, null),
+		roomHumidity: new Kpi('roomHumidity', 0, 'Humedad Ambiente', '%', '#00c0ef', null, 'fa-cloud', false, null),
+		systemTemperature: new Kpi('systemTemperature', 0, 'Temperatura Sistema', 'ºC', '#605ca8', null, 'fa-thermometer-full', false, null),
+		loadSystem: new Kpi('loadSystem', 0, 'Carga Sistema', null, '#605ca8', null, 'fa-spinner', false, null),
+		loadSystem5: new Kpi('loadSystem', 0, "Carga Sistema 5'", null, '#605ca8', null, 'fa-spinner', false, null),
+		loadSystem15: new Kpi('loadSystem', 0, "Carga Sistema 15'", null, '#605ca8', null, 'fa-spinner', false, null),
+		higrometer1: new Kpi('higrometer1', 0, 'Higrómetro 1', '%', '#00a65a', null, 'fa-leaf', false, null),
+		higrometer2: new Kpi('higrometer2', 0, 'Higrómetro 2', '%', '#00a65a', null, 'fa-leaf', false, null),
+		higrometer3: new Kpi('higrometer3', 0, 'Higrómetro 3', '%', '#00a65a', null, 'fa-leaf', false, null),
+		higrometer4: new Kpi('higrometer4', 0, 'Higrómetro 4', '%', '#00a65a', null, 'fa-leaf', false, null),
+		bomb: new Kpi('bomb', null, 'Tanque agua', null, '#001f3f', '#605ca8', 'fa-signal', true, false),
+		lowLevelBomb: new Kpi('lowLevelBomb', null, 'Nivel bajo tanque agua', null, '#001f3f', '#605ca8', 'fa-signal', true, false),
+		solenoid1: new Kpi('solenoid1', null, 'Electroválvula 1', null, '#001f3f', '#605ca8', 'fa-signal', true, false),
+		solenoid2: new Kpi('solenoid2', null, 'Electroválvula 2', null, '#001f3f', '#605ca8', 'fa-signal', true, false),
+		solenoid3: new Kpi('solenoid3', null, 'Electroválvula 3', null, '#001f3f', '#605ca8', 'fa-signal', true, false),
+		solenoid4: new Kpi('solenoid4', null, 'Electroválvula 4', null, '#001f3f', '#605ca8', 'fa-signal', true, false),
 	};
 	this.times = {
 		solenoid1: 0,
@@ -30,17 +34,6 @@ function Realtime (io) {
 		solenoid3: 0,
 		solenoid4: 0,
 		bomb: 0,
-	};
-	this.electricity = {
-		irms: 0,
-		power: 0,
-		watts: 0,
-	};
-	this.dataSystemInfo = {
-		temperature: 0,
-		avg: 0,
-		avg5: 0,
-		avg15: 0
 	};
 	this.timerSystem = setInterval(function() {
 		exec(process.env['TEMP_COMMAND'], function(error, stdout, stderr) {
@@ -71,14 +64,11 @@ function Realtime (io) {
 				  				log.error('Error saving systeminfo: ' + errSavingSystemInfo);
 				  			}
 				  			else {
-				  				_this.dataSystemInfo = {
-				  					temperature: newSystemInfo.temperature,
-				  					avg: newSystemInfo.avg,
-				  					avg5: newSystemInfo.avg5,
-				  					avg15: newSystemInfo.avg15,
-								};
-								_this.io.emit('systeminfo', _this.dataSystemInfo);
-								log.info('System info: ' + _this.dataSystemInfo.temperature + 'ºC, ' + _this.dataSystemInfo.avg + ', ' + _this.dataSystemInfo.avg5 + ', ' + _this.dataSystemInfo.avg15);
+				  				_this.kpis.systemTemperature.setValue(newSystemInfo.temperature);
+				  				_this.kpis.loadSystem.setValue(newSystemInfo.avg);
+				  				_this.kpis.loadSystem5.setValue(newSystemInfo.avg5);
+				  				_this.kpis.loadSystem15.setValue(newSystemInfo.avg15);
+								log.info('System info: ' + newSystemInfo.temperature + 'ºC, ' + newSystemInfo.avg + ', ' + newSystemInfo.avg5 + ', ' + newSystemInfo.avg15);
 				  			}
 				  		});
 					}
@@ -89,15 +79,13 @@ function Realtime (io) {
 }
 
 Realtime.prototype = {
-	getSystemInfo: function() {
-		return this.dataSystemInfo;
-	},
 	setElectricity: function(electricity) {
-		this.electricity = electricity;
-		this.io.emit('electricity', this.getElectricity());
-	},
-	getElectricity: function() {
-		return this.electricity;
+		for (var key in electricity) {
+			if (this.kpis.hasOwnProperty(key)) {
+				this.kpis[key].setValue(electricity[key]);
+			}
+		}
+		this.sendKpis();
 	},
 	setWatering: function(watering) {
 		this.watering = watering;
@@ -108,34 +96,27 @@ Realtime.prototype = {
 	},
 	setSignals: function(signals) {
 		for (var signal in signals) {
-			this.signals[signal] = signals[signal] == 1 ? true : false;
+			if (this.kpis.hasOwnProperty(signal)) {
+				this.kpis[signal].setActive(signals[signal] == 1 ? true : false);
+			}
 		}
-		this.io.emit('signals', this.getSignals());
-	},
-	getSignals: function() {
-		return this.signals;
+		this.sendKpis();
 	},
 	setHigrometers: function(higrometers) {
 		for (var higrometer in higrometers) {
-			if (this.higrometers.hasOwnProperty(higrometer)) {
-				this.higrometers[higrometer] = higrometers[higrometer];
+			if (this.kpis.hasOwnProperty(higrometer)) {
+				this.kpis[higrometer].setValue(higrometers[higrometer]);
 			}
 		}
-		this.io.emit('higrometers', this.getHigrometers());
-	},
-	getHigrometers: function() {
-		return this.higrometers;
-	},
-	getDht22: function() {
-		return this.dht22;
+		this.sendKpis();
 	},
 	setDht22: function(dht22) {
 		for (var key in dht22) {
-			if (this.dht22.hasOwnProperty(key)) {
-				this.dht22[key] = dht22[key];
+			if (this.kpis.hasOwnProperty(key)) {
+				this.kpis[key].setValue(dht22[key]);
 			}
 		}
-		this.io.emit('dht22', this.getDht22());
+		this.sendKpis();
 	},
 	sendEvent: function(event) {
 		this.io.emit('event', event);
@@ -157,6 +138,12 @@ Realtime.prototype = {
 	getChangingTimes: function() {
 		return this.changingTimes;
 	},
+	sendKpis: function () {
+		this.io.emit('kpis', this.kpis);
+	},
+	getKpis: function() {
+		return this.kpis;
+	}
 };
 
 module.exports = Realtime;
