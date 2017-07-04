@@ -1,7 +1,7 @@
 app.directive('kpi', function() {
     return {
         restrict: 'E',
-        transclude: true,
+        replace: true,
         templateUrl: '/app/directives/kpi/kpi.directive.html',
         scope: {
             data: '='

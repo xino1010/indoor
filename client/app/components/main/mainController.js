@@ -1,7 +1,13 @@
-app.controller('mainController', function($scope, $window, $location, $interval, auth, users, socket, localstorage, realtime) {
+app.controller('mainController', function($rootScope, $scope, $window, $location, $interval, auth, users, socket, localstorage, realtime) {
+	$rootScope.$on('kpis', function(event, data){
+		if (data != null) {
+			$scope.kpis = data;
+			$scope.$apply();
+		}
+	});
 	$scope.user = auth.getUser();
 	$scope.users = users.getUsers();
-	$scope.kpis = realtime.getKpis();
+	$scope.kpis = [];
 	$scope.dataDht22 = [];
 	$scope.dataHigrometers = [];
 	$scope.dataElectricity = [];
@@ -640,32 +646,12 @@ app.controller('mainController', function($scope, $window, $location, $interval,
 		$scope.watering = data;
 	});
 	$scope.changingTimes = false;
-	$scope.times = {
-		solenoid1: {
-			name: 'Electroválvula 1',
-			time: 1
-		},
-		solenoid2: {
-			name: 'Electroválvula 2',
-			time: 1
-		},
-		solenoid3: {
-			name: 'Electroválvula 3',
-			time: 1
-		},
-		solenoid4: {
-			name: 'Electroválvula 4',
-			time: 1
-		},
-		bomb: {
-			name: 'Bomba agua',
-			time: 1
-		},
-	};
 	$scope.changeTimes = function() {
 		var info = {};
-		for (var key in $scope.times) {
-			info[key] = $scope.times[key].time * 1000;
+		for (var key in $scope.kpis) {
+			if ($scope.kpis[key].editable) {
+				info[key] = $scope.kpis[key].value * 1000;
+			}
 		}
 		var obj = {
 			active: true,
@@ -678,8 +664,8 @@ app.controller('mainController', function($scope, $window, $location, $interval,
 	});
 	socket.on('times', function(data) {
 		for (var key in data) {
-			if ($scope.times.hasOwnProperty(key)) {
-				$scope.times[key].time = data[key] / 1000;
+			if ($scope.kpis.hasOwnProperty(key)) {
+				$scope.times[key].value = data[key] / 1000;
 			}
 		}
 	});

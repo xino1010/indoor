@@ -187,8 +187,6 @@ function Socket(io) {
 							socket.emit('watering', _this.rt.getWatering());
 							// Send current status of process change times
 							socket.emit('change-times', _this.rt.getChangingTimes());
-							// Send current status of timers
-							socket.emit('times', _this.rt.getTimes());
 							// Send kpis
 							socket.emit('kpis', _this.rt.getKpis());
 						}

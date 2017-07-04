@@ -9,10 +9,11 @@
     <div class="info-box-content">
       <div class="form-group">
         <span class="info-box-text">{{ data.name }}</span>
-        <span ng-if="data.canBeActivated" class="info-box-number">
+        <input ng-if="data.editable" type="number" min="1" max="120" class="form-control col-sm-6" placeholder="Segundos..." value="0" ng-model="data.value">
+        <span ng-if="data.canBeActivated && !data.editable" class="info-box-number">
           {{ data.activated ? "Activo" : "Desactivado" }}
         </span>
-        <span ng-if="!data.canBeActivated" class="info-box-number">
+        <span ng-if="!data.canBeActivated && !data.editable" class="info-box-number">
           {{ data.value | number:2 }}{{ data.unity }}
         </span>
       </div>

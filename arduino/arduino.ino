@@ -228,10 +228,10 @@ void leerEntradaSerial() {
 
 void actualizarTiempos(JsonObject &root) {
   for (int i = 0; i < NUMERO_ELECTROVALVULAS; i++) {
-    String key = String("solenoid") + String(i + 1);
+    String key = String("timeSolenoid") + String(i + 1);
     tiemposElectrovalvulas[i] = root["data"][key];
   }
-  tiempoBombaAgua = root["data"]["bomb"];
+  tiempoBombaAgua = root["data"]["timeBomb"];
   enviarTiempos();
   enviarEvento("TIEMPOS_ACTUALIZADOS");
 }
@@ -243,10 +243,10 @@ void enviarTiempos() {
   root["type"] = "times";
   JsonObject& data = root.createNestedObject("data");
   for (int i = 0; i < NUMERO_ELECTROVALVULAS; i++) {
-    String key = String("solenoid") + String(i + 1);
+    String key = String("timeSolenoid") + String(i + 1);
     data[key] = tiemposElectrovalvulas[i];
   }
-  data["bomb"] = tiempoBombaAgua;
+  data["timeBomb"] = tiempoBombaAgua;
   imprimeJson(root);
 }
 

@@ -1,4 +1,4 @@
-function Kpi (key, value, name, unity, color, colorActivated, icon, canBeActivated, activated) {
+function Kpi (key, value, name, unity, color, colorActivated, icon, canBeActivated, activated, editable) {
 	this.key = key;
 	this.value = value;
 	this.name = name;
@@ -8,6 +8,7 @@ function Kpi (key, value, name, unity, color, colorActivated, icon, canBeActivat
 	this.icon = icon;
 	this.canBeActivated = canBeActivated;
 	this.activated = activated;
+	this.editable = editable;
 }
 
 Kpi.prototype = {
@@ -64,6 +65,12 @@ Kpi.prototype = {
 	},
 	setActivated: function (activated) {
 		this.activated = activated;
+	},
+	getEditable: function () {
+		return this.editable;
+	},
+	setEditable: function (editable) {
+		this.editable = editable;
 	}
 };
 
