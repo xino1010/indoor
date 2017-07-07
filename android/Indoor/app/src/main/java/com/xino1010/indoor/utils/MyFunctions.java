@@ -1,4 +1,4 @@
-package com.xino1010.indoor;
+package com.xino1010.indoor.utils;
 
 import java.text.DateFormat;
 import java.text.ParseException;

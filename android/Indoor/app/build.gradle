@@ -13,7 +13,7 @@ android {
     }
     buildTypes {
         debug {
-            buildConfigField 'String', 'BASE_URL', '"http://192.168.1.7:3000"'
+            buildConfigField 'String', 'BASE_URL', '"http://192.168.0.94:3000"'
             buildConfigField "int", "FOO", "42"
         }
         release {
@@ -27,6 +27,10 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile ('io.socket:socket.io-client:0.8.3') {
+        // excluding org.json which is provided by Android
+        exclude group: 'org.json', module: 'json'
+    }
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })

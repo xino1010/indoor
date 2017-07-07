@@ -1,5 +1,7 @@
-package com.xino1010.indoor;
+package com.xino1010.indoor.utils;
 
+import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 import android.widget.TextView;
@@ -10,6 +12,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.xino1010.indoor.BuildConfig;
+import com.xino1010.indoor.MainActivity;
+import com.xino1010.indoor.R;
+import com.xino1010.indoor.fragments.KpiFragment;
 import com.xino1010.indoor.models.User;
 
 import org.json.JSONException;
@@ -24,7 +30,7 @@ import java.util.Map;
 
 public class Api {
 
-    public static void login(Context context, final String username, final String password, final TextView errorLogintextView) {
+    public static void login(final Context context, final String username, final String password, final TextView errorLogintextView) {
         RequestQueue queue = Volley.newRequestQueue(context);
         String url = BuildConfig.BASE_URL + "/auth/login";
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
@@ -43,6 +49,9 @@ public class Api {
                                     errorLogintextView.setText(result.getString("message"));
                                     User user = new User(result.getJSONObject("user"));
                                     MySingleton.getInstance().setUser(user);
+                                    Activity activity = (MainActivity) context;
+                                    KpiFragment kpiFragment = new KpiFragment();
+                                    activity.getFragmentManager().beginTransaction().replace(R.id.frameContainer, kpiFragment).commit();
                                 }
                             }
                         } catch (JSONException e) {

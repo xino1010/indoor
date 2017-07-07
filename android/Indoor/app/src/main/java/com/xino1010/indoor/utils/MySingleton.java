@@ -1,4 +1,4 @@
-package com.xino1010.indoor;
+package com.xino1010.indoor.utils;
 
 import com.xino1010.indoor.models.User;
 
@@ -21,6 +21,10 @@ public class MySingleton {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public User getUser() {
+        return this.user;
     }
 
 }

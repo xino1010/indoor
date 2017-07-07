@@ -1,6 +1,6 @@
 package com.xino1010.indoor.models;
 
-import com.xino1010.indoor.MyFunctions;
+import com.xino1010.indoor.utils.MyFunctions;
 
 import org.json.JSONException;
 import org.json.JSONObject;
