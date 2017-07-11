@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.xino1010.indoor.IndoorApplication;
 import com.xino1010.indoor.R;
 import com.xino1010.indoor.adapters.KpiAdapter;
@@ -25,9 +26,6 @@ import java.util.Iterator;
 
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
-
-import static android.R.attr.name;
-import static android.R.attr.value;
 
 public class KpiFragment extends Fragment {
 
@@ -53,7 +51,7 @@ public class KpiFragment extends Fragment {
         this.socket.on(Socket.EVENT_RECONNECT, onSocketReconnect);
         this.socket.on(Socket.EVENT_CONNECT_ERROR, onSocketConnectError);
         this.socket.on(Socket.EVENT_CONNECT_TIMEOUT, onSocketConnectError);
-        //this.socket.on(Constants.SOCKET_KPIS, onKpis);
+        this.socket.on(Constants.SOCKET_KPIS, onKpis);
         this.socket.connect();
     }
 
@@ -121,6 +119,7 @@ public class KpiFragment extends Fragment {
                     if (socketConnected == false) {
                         Toast.makeText(getContext(), "Connected to WS", Toast.LENGTH_LONG).show();
                         socketConnected = true;
+                        socket.emit(Constants.SCOCKET_FCM_TOKEN, FirebaseInstanceId.getInstance().getToken());
                         socket.emit(Constants.SOCKET_USER_ID, MySingleton.getInstance().getUser().getId());
                     }
                 }
@@ -190,6 +189,7 @@ public class KpiFragment extends Fragment {
                             e.printStackTrace();
                         }
                     }
+
                     kpiAdapter.notifyDataSetChanged();
                 }
             });

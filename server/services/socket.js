@@ -147,11 +147,13 @@ function Socket(io) {
 
 	io.on('connection', function(socket) {
 
+		log.info('New Connection socket ' + socket.id)
 		// New socket opened
 		_this.sockets[socket.id] = null;
 
 		// User logged in app, updating socketid attribute of user
 		socket.on('userid', function(userid) {
+			log.info('Websocket ' + socket.id + ' userid ' + userid + ' is trying to register in db');
 			User.findById(userid, function(err, user) {
 				if (err) {
 					log.error('Error retriving user ' + data._id + ': ' + err);
@@ -210,6 +212,7 @@ function Socket(io) {
 		// Socket disconnected
 		socket.on('disconnect', function() {
 			delete _this.sockets[socket.id];
+			log.info('Websocket ' + socket.id + ' disconnected');
 			User.findOne({socketid: socket.id}, function(err, user) {
 				if (err) {
 					log.info('Error getting user of socketid ' + socket.id + ': ' + err);

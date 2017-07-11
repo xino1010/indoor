@@ -11,6 +11,7 @@ public class Constants {
     public static String PREFERENCES_PASSWORD = "PREFERENCES_PASSWORD";
 
     // SOCKET EVENTS
+    public static String SCOCKET_FCM_TOKEN = "fcmtoken";
     public static String SOCKET_USER_ID = "userid";
     public static String SOCKET_KPIS = "kpis";
 }

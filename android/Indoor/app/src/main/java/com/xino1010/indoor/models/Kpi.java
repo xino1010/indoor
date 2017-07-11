@@ -37,16 +37,26 @@ public class Kpi {
 
     public Kpi(JSONObject data) {
         try {
-            setKey(data.getString("key"));
-            setValue(data.getDouble("value"));
-            setName(data.getString("name"));
-            setUnity(data.getString("unity"));
-            setColor(data.getString("color"));
-            setColorActivated(data.getString("colorActivated"));
-            setIcon(data.getString("icon"));
-            setCanBeActivated(data.getBoolean("canBeActivated"));
-            setActivated(data.getBoolean("activated"));
-            setEditable(data.getBoolean("editable"));
+            if (data.has("key") && !data.isNull("key"))
+                setKey(data.getString("key"));
+            if (data.has("value") && !data.isNull("value"))
+                setValue(data.getDouble("value"));
+            if (data.has("name") && !data.isNull("name"))
+                setName(data.getString("name"));
+            if (data.has("unity") && !data.isNull("unity"))
+                setUnity(data.getString("unity"));
+            if (data.has("color") && !data.isNull("color"))
+                setColor(data.getString("color"));
+            if (data.has("colorActivated") && !data.isNull("canActivated"))
+                setColorActivated(data.getString("colorActivated"));
+            if (data.has("icon") && !data.isNull("icon"))
+                setIcon(data.getString("icon"));
+            if (data.has("canBeActivated") && !data.isNull("canBeActivated"))
+                setCanBeActivated(data.getBoolean("canBeActivated"));
+            if (data.has("activated") && !data.isNull("activated"))
+                setActivated(data.getBoolean("activated"));
+            if (data.has("editable") && !data.isNull("editable"))
+                setEditable(data.getBoolean("editable"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
